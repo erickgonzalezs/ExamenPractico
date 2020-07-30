@@ -103,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\VentasController.cs" />
     <Compile Include="Dtos\ErrorAltatecResponseDto.cs" />
     <Compile Include="Dtos\VentaMensualDetalleDto.cs" />
