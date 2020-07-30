@@ -15,7 +15,7 @@
     public VentaMensualDto(Cliente cte, DomicilioCliente dom, List<SpGetVentaMensual_Result> listaventas)
     {
       decimal ventatotal = listaventas.Sum(x => x.VentaMes) ?? 0;
-      cliente = cte.Nombre;
+      cliente = $"{cte.Nombre} {cte.ApellidoPaterno} {cte.ApellidoPaterno}";
       direccion =
         $"{dom.Calle} {dom.NumeroExterior}, Colonia: {dom.Colonia}, CP: {dom.CodigoPostal}, {dom.Ciudad}, {dom.Estado}, {dom.Pais}";
       telefono = dom.Telefono;

@@ -26,6 +26,8 @@ namespace ExamenPracticoApi.Models
         public string Nombre { get; set; }
         public System.DateTime FechaRegistro { get; set; }
         public bool Activo { get; set; }
+        public string ApellidoPaterno { get; set; }
+        public string ApellidoMaterno { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DomicilioCliente> DomicilioCliente { get; set; }
