@@ -1,2 +1,2 @@
-# ExamenPractico
+# Examen Practico
  Examen práctico Altatec
