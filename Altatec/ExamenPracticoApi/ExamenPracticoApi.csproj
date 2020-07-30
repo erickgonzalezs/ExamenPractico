@@ -103,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\VentasController.cs" />
     <Compile Include="Dtos\ErrorAltatecResponseDto.cs" />
     <Compile Include="Dtos\VentaMensualDetalleDto.cs" />
     <Compile Include="Dtos\VentaMensualDto.cs" />
@@ -163,7 +164,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
     <Folder Include="Filters\" />
   </ItemGroup>
   <ItemGroup>
