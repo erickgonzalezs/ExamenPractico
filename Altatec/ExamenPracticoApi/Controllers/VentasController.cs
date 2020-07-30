@@ -1,5 +1,6 @@
 ﻿namespace ExamenPracticoApi.Controllers
 {
+  using Filters;
   using Dtos;
   using Models;
   using System;
@@ -9,7 +10,9 @@
   using System.Net;
   using System.Threading.Tasks;
   using System.Web.Http;
+  using Models.CustonExceptions;
 
+  [ExcepcionAltatecFilter]
   public class VentasController : ApiController
   {
     private readonly ExamenPracticoEntities _db = new ExamenPracticoEntities();
@@ -28,12 +31,7 @@
       }
       catch (Exception e)
       {
-        ErrorAltatecResponseDto err = new ErrorAltatecResponseDto
-        {
-          error = $"Problema al ejecutar Controller...",
-          detalle = e.Message
-        };
-        return StatusCode(HttpStatusCode.InternalServerError);
+        throw new AltatecCustomExceptionModel(e.Message);
       }
 
     }
