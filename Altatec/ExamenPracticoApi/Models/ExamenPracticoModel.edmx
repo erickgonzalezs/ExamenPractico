@@ -1,0 +1,404 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ExamenPracticoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Cliente">
+          <Key>
+            <PropertyRef Name="ClienteId" />
+          </Key>
+          <Property Name="ClienteId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RazonSocial" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="FechaRegistro" Type="datetime" Nullable="false" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DomicilioCliente">
+          <Key>
+            <PropertyRef Name="DomicilioClienteId" />
+          </Key>
+          <Property Name="DomicilioClienteId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClienteId" Type="int" Nullable="false" />
+          <Property Name="Calle" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="NumeroExterior" Type="int" Nullable="false" />
+          <Property Name="NumeroInterior" Type="int" />
+          <Property Name="Colonia" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="CodigoPostal" Type="int" Nullable="false" />
+          <Property Name="Ciudad" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Estado" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Pais" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Telefono" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="EmailPrincipal" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="EmailSecundario" Type="varchar" MaxLength="20" />
+          <Property Name="TotalCompra" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="ContadorCompras" Type="int" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Venta">
+          <Key>
+            <PropertyRef Name="VentaId" />
+          </Key>
+          <Property Name="VentaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClienteId" Type="int" Nullable="false" />
+          <Property Name="DomicilioClienteId" Type="int" Nullable="false" />
+          <Property Name="FechaVenta" Type="datetime" Nullable="false" />
+          <Property Name="Subtotal" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="TotalArticulos" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="VentaDetalle">
+          <Key>
+            <PropertyRef Name="VentaDetalleId" />
+          </Key>
+          <Property Name="VentaDetalleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VentaId" Type="int" Nullable="false" />
+          <Property Name="ProductoCodigo" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="ProductoDescripcion" Type="varchar" MaxLength="200" />
+          <Property Name="ProductoPrecioUnitario" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="ProductoCantidad" Type="int" Nullable="false" />
+          <Property Name="Subtotal" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_DomicilioCliente_Cliente">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="1" />
+          <End Role="DomicilioCliente" Type="Self.DomicilioCliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="ClienteId" />
+            </Principal>
+            <Dependent Role="DomicilioCliente">
+              <PropertyRef Name="ClienteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Venta_Cliente">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="1" />
+          <End Role="Venta" Type="Self.Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="ClienteId" />
+            </Principal>
+            <Dependent Role="Venta">
+              <PropertyRef Name="ClienteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Venta_DomicilioCliente">
+          <End Role="DomicilioCliente" Type="Self.DomicilioCliente" Multiplicity="1" />
+          <End Role="Venta" Type="Self.Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DomicilioCliente">
+              <PropertyRef Name="DomicilioClienteId" />
+            </Principal>
+            <Dependent Role="Venta">
+              <PropertyRef Name="DomicilioClienteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VentaDetalle_Venta">
+          <End Role="Venta" Type="Self.Venta" Multiplicity="1" />
+          <End Role="VentaDetalle" Type="Self.VentaDetalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Venta">
+              <PropertyRef Name="VentaId" />
+            </Principal>
+            <Dependent Role="VentaDetalle">
+              <PropertyRef Name="VentaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="SpGetVentaMensual" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClienteId" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="ExamenPracticoModelStoreContainer">
+          <EntitySet Name="Cliente" EntityType="Self.Cliente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DomicilioCliente" EntityType="Self.DomicilioCliente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Venta" EntityType="Self.Venta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VentaDetalle" EntityType="Self.VentaDetalle" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_DomicilioCliente_Cliente" Association="Self.FK_DomicilioCliente_Cliente">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="DomicilioCliente" EntitySet="DomicilioCliente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Venta_Cliente" Association="Self.FK_Venta_Cliente">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Venta" EntitySet="Venta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Venta_DomicilioCliente" Association="Self.FK_Venta_DomicilioCliente">
+            <End Role="DomicilioCliente" EntitySet="DomicilioCliente" />
+            <End Role="Venta" EntitySet="Venta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VentaDetalle_Venta" Association="Self.FK_VentaDetalle_Venta">
+            <End Role="Venta" EntitySet="Venta" />
+            <End Role="VentaDetalle" EntitySet="VentaDetalle" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ExamenPracticoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Cliente">
+          <Key>
+            <PropertyRef Name="ClienteId" />
+          </Key>
+          <Property Name="ClienteId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RazonSocial" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FechaRegistro" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="DomicilioCliente" Relationship="Self.FK_DomicilioCliente_Cliente" FromRole="Cliente" ToRole="DomicilioCliente" />
+          <NavigationProperty Name="Venta" Relationship="Self.FK_Venta_Cliente" FromRole="Cliente" ToRole="Venta" />
+        </EntityType>
+        <EntityType Name="DomicilioCliente">
+          <Key>
+            <PropertyRef Name="DomicilioClienteId" />
+          </Key>
+          <Property Name="DomicilioClienteId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClienteId" Type="Int32" Nullable="false" />
+          <Property Name="Calle" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NumeroExterior" Type="Int32" Nullable="false" />
+          <Property Name="NumeroInterior" Type="Int32" />
+          <Property Name="Colonia" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CodigoPostal" Type="Int32" Nullable="false" />
+          <Property Name="Ciudad" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Estado" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Pais" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Telefono" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EmailPrincipal" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EmailSecundario" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="TotalCompra" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="ContadorCompras" Type="Int32" />
+          <NavigationProperty Name="Cliente" Relationship="Self.FK_DomicilioCliente_Cliente" FromRole="DomicilioCliente" ToRole="Cliente" />
+          <NavigationProperty Name="Venta" Relationship="Self.FK_Venta_DomicilioCliente" FromRole="DomicilioCliente" ToRole="Venta" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Venta">
+          <Key>
+            <PropertyRef Name="VentaId" />
+          </Key>
+          <Property Name="VentaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClienteId" Type="Int32" Nullable="false" />
+          <Property Name="DomicilioClienteId" Type="Int32" Nullable="false" />
+          <Property Name="FechaVenta" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Subtotal" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="TotalArticulos" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Cliente" Relationship="Self.FK_Venta_Cliente" FromRole="Venta" ToRole="Cliente" />
+          <NavigationProperty Name="DomicilioCliente" Relationship="Self.FK_Venta_DomicilioCliente" FromRole="Venta" ToRole="DomicilioCliente" />
+          <NavigationProperty Name="VentaDetalle" Relationship="Self.FK_VentaDetalle_Venta" FromRole="Venta" ToRole="VentaDetalle" />
+        </EntityType>
+        <EntityType Name="VentaDetalle">
+          <Key>
+            <PropertyRef Name="VentaDetalleId" />
+          </Key>
+          <Property Name="VentaDetalleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VentaId" Type="Int32" Nullable="false" />
+          <Property Name="ProductoCodigo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProductoDescripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ProductoPrecioUnitario" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="ProductoCantidad" Type="Int32" Nullable="false" />
+          <Property Name="Subtotal" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Venta" Relationship="Self.FK_VentaDetalle_Venta" FromRole="VentaDetalle" ToRole="Venta" />
+        </EntityType>
+        <Association Name="FK_DomicilioCliente_Cliente">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="1" />
+          <End Role="DomicilioCliente" Type="Self.DomicilioCliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="ClienteId" />
+            </Principal>
+            <Dependent Role="DomicilioCliente">
+              <PropertyRef Name="ClienteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Venta_Cliente">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="1" />
+          <End Role="Venta" Type="Self.Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="ClienteId" />
+            </Principal>
+            <Dependent Role="Venta">
+              <PropertyRef Name="ClienteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Venta_DomicilioCliente">
+          <End Role="DomicilioCliente" Type="Self.DomicilioCliente" Multiplicity="1" />
+          <End Role="Venta" Type="Self.Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DomicilioCliente">
+              <PropertyRef Name="DomicilioClienteId" />
+            </Principal>
+            <Dependent Role="Venta">
+              <PropertyRef Name="DomicilioClienteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VentaDetalle_Venta">
+          <End Role="Venta" Type="Self.Venta" Multiplicity="1" />
+          <End Role="VentaDetalle" Type="Self.VentaDetalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Venta">
+              <PropertyRef Name="VentaId" />
+            </Principal>
+            <Dependent Role="VentaDetalle">
+              <PropertyRef Name="VentaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ExamenPracticoEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Cliente" EntityType="Self.Cliente" />
+          <EntitySet Name="DomicilioCliente" EntityType="Self.DomicilioCliente" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="Venta" EntityType="Self.Venta" />
+          <EntitySet Name="VentaDetalle" EntityType="Self.VentaDetalle" />
+          <AssociationSet Name="FK_DomicilioCliente_Cliente" Association="Self.FK_DomicilioCliente_Cliente">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="DomicilioCliente" EntitySet="DomicilioCliente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Venta_Cliente" Association="Self.FK_Venta_Cliente">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Venta" EntitySet="Venta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Venta_DomicilioCliente" Association="Self.FK_Venta_DomicilioCliente">
+            <End Role="DomicilioCliente" EntitySet="DomicilioCliente" />
+            <End Role="Venta" EntitySet="Venta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VentaDetalle_Venta" Association="Self.FK_VentaDetalle_Venta">
+            <End Role="Venta" EntitySet="Venta" />
+            <End Role="VentaDetalle" EntitySet="VentaDetalle" />
+          </AssociationSet>
+          <FunctionImport Name="SpGetVentaMensual" ReturnType="Collection(ExamenPracticoModel.SpGetVentaMensual_Result)">
+            <Parameter Name="ClienteId" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="SpGetVentaMensual_Result">
+          <Property Type="String" Name="Mes" Nullable="true" MaxLength="35" />
+          <Property Type="Decimal" Name="VentaMes" Nullable="true" Precision="38" Scale="2" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ExamenPracticoModelStoreContainer" CdmEntityContainer="ExamenPracticoEntities">
+          <EntitySetMapping Name="Cliente">
+            <EntityTypeMapping TypeName="ExamenPracticoModel.Cliente">
+              <MappingFragment StoreEntitySet="Cliente">
+                <ScalarProperty Name="ClienteId" ColumnName="ClienteId" />
+                <ScalarProperty Name="RazonSocial" ColumnName="RazonSocial" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DomicilioCliente">
+            <EntityTypeMapping TypeName="ExamenPracticoModel.DomicilioCliente">
+              <MappingFragment StoreEntitySet="DomicilioCliente">
+                <ScalarProperty Name="DomicilioClienteId" ColumnName="DomicilioClienteId" />
+                <ScalarProperty Name="ClienteId" ColumnName="ClienteId" />
+                <ScalarProperty Name="Calle" ColumnName="Calle" />
+                <ScalarProperty Name="NumeroExterior" ColumnName="NumeroExterior" />
+                <ScalarProperty Name="NumeroInterior" ColumnName="NumeroInterior" />
+                <ScalarProperty Name="Colonia" ColumnName="Colonia" />
+                <ScalarProperty Name="CodigoPostal" ColumnName="CodigoPostal" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Pais" ColumnName="Pais" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="EmailPrincipal" ColumnName="EmailPrincipal" />
+                <ScalarProperty Name="EmailSecundario" ColumnName="EmailSecundario" />
+                <ScalarProperty Name="TotalCompra" ColumnName="TotalCompra" />
+                <ScalarProperty Name="ContadorCompras" ColumnName="ContadorCompras" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="ExamenPracticoModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Venta">
+            <EntityTypeMapping TypeName="ExamenPracticoModel.Venta">
+              <MappingFragment StoreEntitySet="Venta">
+                <ScalarProperty Name="VentaId" ColumnName="VentaId" />
+                <ScalarProperty Name="ClienteId" ColumnName="ClienteId" />
+                <ScalarProperty Name="DomicilioClienteId" ColumnName="DomicilioClienteId" />
+                <ScalarProperty Name="FechaVenta" ColumnName="FechaVenta" />
+                <ScalarProperty Name="Subtotal" ColumnName="Subtotal" />
+                <ScalarProperty Name="TotalArticulos" ColumnName="TotalArticulos" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VentaDetalle">
+            <EntityTypeMapping TypeName="ExamenPracticoModel.VentaDetalle">
+              <MappingFragment StoreEntitySet="VentaDetalle">
+                <ScalarProperty Name="VentaDetalleId" ColumnName="VentaDetalleId" />
+                <ScalarProperty Name="VentaId" ColumnName="VentaId" />
+                <ScalarProperty Name="ProductoCodigo" ColumnName="ProductoCodigo" />
+                <ScalarProperty Name="ProductoDescripcion" ColumnName="ProductoDescripcion" />
+                <ScalarProperty Name="ProductoPrecioUnitario" ColumnName="ProductoPrecioUnitario" />
+                <ScalarProperty Name="ProductoCantidad" ColumnName="ProductoCantidad" />
+                <ScalarProperty Name="Subtotal" ColumnName="Subtotal" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SpGetVentaMensual" FunctionName="ExamenPracticoModel.Store.SpGetVentaMensual">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ExamenPracticoModel.SpGetVentaMensual_Result">
+                <ScalarProperty Name="Mes" ColumnName="Mes" />
+                <ScalarProperty Name="VentaMes" ColumnName="VentaMes" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
